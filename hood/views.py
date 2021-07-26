@@ -5,8 +5,6 @@ from django.contrib.auth.decorators import login_required
 from .models import NeighbourHood, Profile
 from .forms import UpdateProfileForm, NeighbourHoodForm
 from django.contrib.auth.models import User
-
-
 @login_required(login_url='login')
 def index(request):
     return render(request, 'index.html')
@@ -25,25 +23,37 @@ def signup(request):
     return render(request, 'registration/signup.html', {'form': form})
 def hoods(request):
     all_hoods = NeighbourHood.objects.all()
-
     params = {
         'all_hoods': all_hoods,
     }
     return render(request, 'all_hoods.html', params)
-
-
 def create_hood(request):
-    form = NeighbourHoodForm()
+    if request.method == 'POST':
+        form = NeighbourHoodForm(request.POST, request.FILES)
+        if form.is_valid():
+            hood = form.save(commit=False)
+            hood.admin = request.user.profile
+            hood.save()
+    else:
+        form = NeighbourHoodForm()
     return render(request, 'newhood.html', {'form': form})
-
-
 def join_hood(request, id):
     neighbourhood = get_object_or_404(NeighbourHood, id=id)
     request.user.profile.neighbourhood = neighbourhood
     request.user.profile.save()
     return redirect('hood')
+
+
+def leave_hood(request, id):
+    hood = get_object_or_404(NeighbourHood, id=id)
+    request.user.profile.neighbourhood = None
+    request.user.profile.save()
+    return redirect('hood')
+
+
 def profile(request, username):
     return render(request, 'profile.html')
+
 def edit_profile(request, username):
     user = User.objects.get(username=username)
     if request.method == 'POST':
