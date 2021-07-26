@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SignupForm
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from .models import NeighbourHood, Profile
-from .forms import UpdateProfileForm
+from .forms import UpdateProfileForm, NeighbourHoodForm
 from django.contrib.auth.models import User
 
 
@@ -25,19 +25,32 @@ def signup(request):
     return render(request, 'registration/signup.html', {'form': form})
 def hoods(request):
     all_hoods = NeighbourHood.objects.all()
+
     params = {
-        'all_hoods': all_hoods
+        'all_hoods': all_hoods,
     }
     return render(request, 'all_hoods.html', params)
+
+
+def create_hood(request):
+    form = NeighbourHoodForm()
+    return render(request, 'newhood.html', {'form': form})
+
+
+def join_hood(request, id):
+    neighbourhood = get_object_or_404(NeighbourHood, id=id)
+    request.user.profile.neighbourhood = neighbourhood
+    request.user.profile.save()
+    return redirect('hood')
 def profile(request, username):
     return render(request, 'profile.html')
-
-
 def edit_profile(request, username):
     user = User.objects.get(username=username)
     if request.method == 'POST':
-        form = UpdateProfileForm(request.POST)
-
+        form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', user.username)
     else:
-        form = UpdateProfileForm()
+        form = UpdateProfileForm(instance=request.user.profile)
     return render(request, 'editprofile.html', {'form': form})
