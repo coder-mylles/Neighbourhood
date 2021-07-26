@@ -40,14 +40,22 @@ def create_hood(request):
 def single_hood(request, hood_id):
     hood = NeighbourHood.objects.get(id=hood_id)
     business = Business.objects.filter(neighbourhood=hood)
-    form = BusinessForm()
+    if request.method == 'POST':
+        form = BusinessForm(request.POST)
+        if form.is_valid():
+            b_form = form.save(commit=False)
+            b_form.neighbourhood = hood
+            b_form.user = request.user.profile
+            b_form.save()
+            return redirect('single-hood', hood.id)
+    else:
+        form = BusinessForm()
     params = {
         'hood': hood,
         'business': business,
         'form': form
     }
     return render(request, 'single_hood.html', params)
-
 def join_hood(request, id):
     neighbourhood = get_object_or_404(NeighbourHood, id=id)
     request.user.profile.neighbourhood = neighbourhood
