@@ -1,6 +1,10 @@
-from django.urls import path, include
-from . import views
+from django.shortcuts import render
+from .forms import SignupForm
 
-urlpatterns = [
-    path('', views.index, name='index')
-]
+
+def index(request):
+    return render(request, 'index.html')
+
+
+def signup(request):
+    return render(request, 'registration/signup.html')
