@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import SignupForm
+from .forms import SignupForm, BusinessForm
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from .models import NeighbourHood, Profile, Business
 from .forms import UpdateProfileForm, NeighbourHoodForm
 from django.contrib.auth.models import User
-
 @login_required(login_url='login')
 def index(request):
     return render(request, 'index.html')
@@ -38,17 +37,16 @@ def create_hood(request):
     else:
         form = NeighbourHoodForm()
     return render(request, 'newhood.html', {'form': form})
-
 def single_hood(request, hood_id):
     hood = NeighbourHood.objects.get(id=hood_id)
     business = Business.objects.filter(neighbourhood=hood)
-    print(business)
+    form = BusinessForm()
     params = {
         'hood': hood,
-        'business': business
+        'business': business,
+        'form': form
     }
     return render(request, 'single_hood.html', params)
-
 
 def join_hood(request, id):
     neighbourhood = get_object_or_404(NeighbourHood, id=id)
