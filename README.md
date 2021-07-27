@@ -11,7 +11,7 @@ This project allows users to post their projects for other users to rate accordi
 ## Screenshots 
 ###### Home page
 
-<img src="">
+<img src="https://github.com/coder-mylles/Neighbourhood/blob/main/media/images/Screenshot%20from%202021-07-28%2000-37-12.png">
 
 
 
