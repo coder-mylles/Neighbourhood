@@ -6,7 +6,7 @@
 This project allows users to join neighbourhoods and create their own.
 
 ##  Live Link  
- Click [View Site](https://neighby.herokuapp.com/login/?next=/)  to visit the site
+ Click [View Site](https://neighby.herokuapp.com)  to visit the site
 
 ## Screenshots 
 ###### Home page
