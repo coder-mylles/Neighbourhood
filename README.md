@@ -1,10 +1,10 @@
-# HomeWatch
-# project-awwards
+# Neighbourhood
 
 >[Martin Mylles](https://github.com/coder-mylles)  
   
 # Description  
-This project allows users to post their projects for other users to rate according to design, usability and content 
+This project allows users to join neighbourhoods and create their own.
+
 ##  Live Link  
  Click [View Site](https://neighby.herokuapp.com/login/?next=/)  to visit the site
 
